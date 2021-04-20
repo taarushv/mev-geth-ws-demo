@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "@flashbots/ethers-provider-bundle": "^0.2.1",
     "ethers": "^5.1.2",
