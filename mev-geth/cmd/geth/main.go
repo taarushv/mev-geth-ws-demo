@@ -125,6 +125,8 @@ var (
 		utils.MinerExtraDataFlag,
 		utils.MinerRecommitIntervalFlag,
 		utils.MinerNoVerfiyFlag,
+		utils.MinerStrictProfitSwitchFlag,
+		utils.MinerProxyContractAddress,
 		utils.NATFlag,
 		utils.NoDiscoverFlag,
 		utils.DiscoveryV5Flag,
@@ -150,6 +152,8 @@ var (
 		utils.EWASMInterpreterFlag,
 		utils.EVMInterpreterFlag,
 		utils.MinerNotifyFullFlag,
+		utils.RelayWSURL,
+		utils.RelayWSAccessKey,
 		configFileFlag,
 	}
 

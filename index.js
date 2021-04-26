@@ -24,6 +24,7 @@ const initMessage = {
 
 // Set heartbeat
 function heartbeat(){
+  console.log("received: pong")
   this.isAlive = true;
 }
 
@@ -71,7 +72,8 @@ const generateTestBundle = async () => {
       encodedTxs: await flashBotsProvider.signBundle(txs),
       blockNumber: `0x${targetBlockNumber.toString(16)}`,
       minTimestamp: 0,
-      maxTimestamp: 0
+      maxTimestamp: 0,
+      revertingTxHashes: []
     },
     type: "bundle"
   }
@@ -95,17 +97,22 @@ const checkBundle = async (payload) => {
 wss.on('connection', async function connection(ws, req){
   ws.isAlive = true;
   ws.on('pong', heartbeat)
-
+  console.log("connected?")
   ws.on('message', message => {
     console.log("received message from ws client: " + message)
   })
-  // Kick this off 2 seconds after a client subscribes
+  
+  // Ensure the client is authenticated
   if(_.includes(accessKeys, req.headers['x-api-key'])){
-    await sleep(2000)
-    const payload = await generateTestBundle()
-    ws.send(JSON.stringify(payload)) // bundle sent to the ws client
-    await sleep(6000)
-    await checkBundle(payload)    
+    // Send bundles every few seconds to test
+    setInterval(async()=> {
+      await sleep(1000)
+      const payload = await generateTestBundle()
+      ws.send(JSON.stringify(payload))
+      await sleep(4000)
+      await checkBundle(payload)
+    }, 12000)
+  
   } else {
     console.log("auth failed")
     ws.terminate()
@@ -116,12 +123,13 @@ wss.on('connection', async function connection(ws, req){
   })
 
 })
-// Heartbeat test to see if connection is still alive every few seconds
+
+// Heartbeat test to see if connection is still alive every 10 seconds
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
     if (ws.isAlive === false) {return ws.terminate()}
     ws.isAlive = false;
-    ws.ping(()=> {});
+    ws.ping(()=> {console.log("sending: ping")});
   });
 }, 10000);
 

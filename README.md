@@ -7,21 +7,24 @@
 
 Instructions
 * Install server dependencies with `yarn install`
+* Run WS server first with `yarn start` (in root folder)
 * Setup private chain datadir and genesis with `rm -rf datadir/ && make geth && ./build/bin/geth init --datadir datadir genesis.json` (in mev-geth folder)
-* Run WS server first with `yarn start` (in root folder, same for below)
-* Run MEV-Geth: `../mev-geth/build/bin/geth --datadir ../mev-geth/datadir --rpc --rpcapi debug,personal,eth,net,web3,txpool,admin,miner --miner.etherbase=0xd912aecb07e9f4e1ea8e6b4779e7fb6aa1c3e4d8 --miner.gasprice 0 --mine --miner.threads=8`
+* Run MEV-Geth: `./build/bin/geth --datadir datadir --rpc --rpcapi debug,personal,eth,net,web3,txpool,admin,miner --miner.etherbase=0xd912aecb07e9f4e1ea8e6b4779e7fb6aa1c3e4d8 --miner.gasprice 0 --mine --miner.threads=8 --relayWSURL="localhost:8080" --relayWSKey="secretABC"`
 
 Output
 
 * WS Server 
 ```
-yarn run v1.22.10
-$ node index.js
+connected?
+sending: ping
+received: pong
 Funding account.....
+sending: ping
+received: pong
 Balance: 1000000000000000000
 Submitting bundle
-Miner before 1029000000000000000000
-Miner after 1031020000000000000000
+Miner before 1157000000000000000000
+Miner after 1159020000000000000000
 Profit (ETH) 0.02
 Profit equals bribe? true
 ```
